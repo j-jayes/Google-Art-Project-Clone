@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <!-- Basics -->
+  <meta charset="utf-8">
+  <title>Google Art Project</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <style>
+  * {margin:0;padding:0;box-sizing:border-box} html{height:100%;width:100%;}
+  html {background:black;}
+  body {background-size:cover!important;height:100%;width:100%;font-family:"Roboto",sans-serif;background-repeat:no-repeat;background-position:center;}
+  .cc {position:absolute;bottom:0;width:100%;background:linear-gradient(to bottom,rgba(0,0,0,0)0%,rgba(0,0,0,0.33)33%,rgba(0,0,0,0.66)100%);padding:50px;font-size:13px;color:#b8b8b8;}
+  a {text-decoration:none;color:#b8b8b8;margin-top:10px;display:inline-block;}
+  h1 a {font-size:24px;color:white;margin-top:10px;font-weight:100;}
+  .search-bar {position:absolute;top:5%;left:5%;transform:translate(-5%,-5%);width:50%;}
+  #search-input {width:50%;padding:10px;font-size:16px;margin-bottom:10px;border:1px solid #ddd;border-radius:5px;}
+  #search-submit {width:10%;padding:10px;background-color:#4CAF50;color:white;font-size:16px;border:none;border-radius:5px;cursor:pointer;}
+  </style>
+</head>
+<body>
+<div class="cc">
+  <h1><a href=""></a></h1>
+  <a class="creator"></a> | <a class="gallery"></a>
+  <p>Art Project from <a href="https://www.google.com/culturalinstitute/">Google Cultural Institute</a></p>
+</div>
+<div class="search-bar">
+  <form action="https://www.google.com/search" method="get">
+    <input type="text" id="search-input" name="q" placeholder="Search Google">
+    <input type="submit" id="search-submit" value="Search">
+  </form>
+</div>
+<script>
+	$.getJSON( "https://www.gstatic.com/culturalinstitute/tabext/imax.json", function(data) {
+
+		var cookie = Cookies.get('item');
+		var random, item;
+
+		if (typeof cookie == "undefined") {
+		  var length = data.length;
+		  var random = Math.floor((Math.random() * length) + 1);
+		  item = data[random];
+		  Cookies.set("item", random, {expires:1});
+		}
+		else {
+		  random = parseInt(Cookies.get('item'));
+		  item = data[random];
+		}
+
+		console.log(item)
+
+	  $("body").css("background-image","url("+item.image+"=s1200)");
+	  $("h1 a").text(item.title).attr("href", "https://www.google.com/culturalinstitute/" + item.link);
+	  $(".creator").text(item.creator).attr("href", item.artist_link);
+	  $(".gallery").text(item.attribution).attr("href", "https://www.google.com/culturalinstitute/" + item.attribution_link);
+
+	});
+
+    // Automatically focus the search input when the page loads
+    $(document).ready(function() {
+      $("#search-input").focus();
+    });
+</script>
+</body>
+</html>
